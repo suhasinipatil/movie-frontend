@@ -1,0 +1,27 @@
+.about {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.about h1,
+.about h2 {
+    color: #333;
+    margin-left: 5%;
+}
+
+.about p {
+    color: #666;
+    margin-bottom: 1em;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: justify;
+}
+
+.about a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.about a:hover {
+    text-decoration: underline;
+}
