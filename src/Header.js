@@ -3,6 +3,7 @@
 
 import React, { useState } from "react";
 import styles from "./styles/Header.module.css";
+import logo from "./images/logo.png";
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,7 +16,7 @@ const Header = () => {
         <header className={styles.headerDiv}>
             <h1 className={styles.title}>
                 <a href="/" className={styles.titleRef}>
-                    <img alt="Movie App" />
+                    <img className={styles.logo} src={logo} alt="Movie App" />
                 </a>
             </h1>
             <div className={styles.buttonContainer}>

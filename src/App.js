@@ -5,7 +5,7 @@ import MovieApp from './MovieApp';
 
 function App() {
   return (
-    <div>
+    <div className='body'>
       <BrowserRouter>
         <MovieApp />
       </BrowserRouter>
