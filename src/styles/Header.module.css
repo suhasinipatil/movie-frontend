@@ -1,20 +1,20 @@
-.write {
+.search {
     font-size: large;
     border: none;
     background-color: black;
     color: white;
 }
 
-.writeRef {
+.Ref {
     text-decoration: none;
     color: white;
 }
 
-.writeIcon {
+.searchIcon {
     margin-right: 5px;
 }
 
-.write:hover {
+.search:hover {
     text-decoration-color: gray;
 }
 
@@ -55,10 +55,7 @@
 }
 
 .logo {
-    width: 100px;
-    /* adjust as needed */
-    height: 100px;
-    /* adjust as needed */
+    width: 25%;
     object-fit: contain;
     /* this will ensure the aspect ratio of the image is maintained */
 }
@@ -68,6 +65,18 @@
 }
 
 .logo:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
     /* Adjust scale as needed */
+}
+
+.searchBar {
+    width: 200px;
+    /* adjust as needed */
+    height: 30px;
+    /* adjust as needed */
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 10px;
+    margin-top: 7px;
 }

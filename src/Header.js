@@ -3,13 +3,29 @@
 
 import React, { useState } from "react";
 import styles from "./styles/Header.module.css";
-import logo from "./images/logo.png";
+import logo from "./images/croppedlogo.png";
 
-const Header = () => {
+const Header = ({ handleSearch }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showSearchBar, setShowSearchBar] = useState(false);
+    const [searchInput, setSearchInput] = useState("");
 
     const logout = () => {
         setIsLoggedIn(false);
+    }
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            console.log(searchInput);
+            handleSearch(event.target.value); // Pass the search input to the parent component
+            setSearchInput(''); // Clear the input field
+            setShowSearchBar(false); // Hide the search bar
+        }
+    }
+
+    const handleChange = (event) => {
+        setSearchInput(event.target.value);
+
     }
 
     return (
@@ -20,11 +36,21 @@ const Header = () => {
                 </a>
             </h1>
             <div className={styles.buttonContainer}>
-                <button className={styles.write}>
+                {showSearchBar && (
+                    <input
+                        type="text"
+                        className={styles.searchBar}
+                        placeholder="Keyword / Title"
+                        value={searchInput}
+                        onChange={handleChange}
+                        onKeyPress={handleKeyPress}
+                    />
+                )}
+                <button className={styles.search} onClick={() => setShowSearchBar(true)}>
                     Search
                 </button>
                 <button className={styles.about}>
-                    <a href="/about" className={styles.writeRef}>About</a>
+                    <a href="/about" className={styles.Ref}>About</a>
                 </button>
                 {isLoggedIn ? (
                     <>
@@ -34,7 +60,7 @@ const Header = () => {
                     </>
                 ) : (
                     <button className={styles.login}>
-                        <a href="/login" className={styles.writeRef} onClick={() => setIsLoggedIn(true)}>Login</a>
+                        <a href="/" className={styles.Ref} onClick={() => setIsLoggedIn(true)}>Login</a>
                     </button>
                 )}
             </div>
