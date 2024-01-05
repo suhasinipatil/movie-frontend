@@ -1,6 +1,6 @@
 // Desc: Home page
 import { useEffect, useState } from "react";
-import MovieItem from "./MovieItem";
+import MovieItem from "../components/MovieItem";
 
 const Home = ({ searchInput }) => {
     const [movies, setMovies] = useState([]);

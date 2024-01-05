@@ -4,17 +4,17 @@
 
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import AboutMe from './AboutMe';
-import Header from './Header';
-import Home from './Home';
+import AboutMe from '../routes/AboutMe';
+import Header from '../components/Header';
+import Login from '../routes/Login';
+import Home from '../routes/Home';
 
 const MovieApp = () => {
     const [searchInput, setSearchInput] = useState("");
 
     const handleSearch = (input) => {
-        console.log(input);
+        //console.log(input);
         setSearchInput(input);
-        // handleSearchInput(input);
     }
 
     return (
@@ -23,6 +23,7 @@ const MovieApp = () => {
             <Routes>
                 <Route path="/" element={<Home searchInput={searchInput} />} />
                 <Route path="/about" element={<AboutMe />} />
+                <Route path="/login" element={<Login />} />
             </Routes>
         </>
     );

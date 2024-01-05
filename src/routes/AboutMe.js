@@ -1,7 +1,7 @@
 // Desc: About Me page
 
 import React from 'react';
-import styles from './styles/AboutMe.module.css';
+import styles from '../styles/AboutMe.module.css';
 
 const AboutMe = () => {
     return (

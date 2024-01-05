@@ -2,8 +2,8 @@
 // This component contains the header for the app. It contains the title, search bar, and the login button.
 
 import React, { useState } from "react";
-import styles from "./styles/Header.module.css";
-import logo from "./images/croppedlogo.png";
+import styles from "../styles/Header.module.css";
+import logo from "../images/croppedlogo.png";
 
 const Header = ({ handleSearch }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -14,9 +14,13 @@ const Header = ({ handleSearch }) => {
         setIsLoggedIn(false);
     }
 
+    const login = () => {
+        setIsLoggedIn(true);
+    }
+
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            console.log(searchInput);
+            //console.log(searchInput);
             handleSearch(event.target.value); // Pass the search input to the parent component
             setSearchInput(''); // Clear the input field
             setShowSearchBar(false); // Hide the search bar
@@ -25,7 +29,6 @@ const Header = ({ handleSearch }) => {
 
     const handleChange = (event) => {
         setSearchInput(event.target.value);
-
     }
 
     return (
@@ -60,7 +63,7 @@ const Header = ({ handleSearch }) => {
                     </>
                 ) : (
                     <button className={styles.login}>
-                        <a href="/" className={styles.Ref} onClick={() => setIsLoggedIn(true)}>Login</a>
+                        <a href="/" className={styles.Ref} onClick={login}>Login</a>
                     </button>
                 )}
             </div>

@@ -1,7 +1,7 @@
 // Desc: This is the main app file
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
-import MovieApp from './MovieApp';
+import MovieApp from './components/MovieApp';
 
 function App() {
   return (
