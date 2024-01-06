@@ -63,7 +63,7 @@ const Header = ({ handleSearch }) => {
                     </>
                 ) : (
                     <button className={styles.login}>
-                        <a href="/" className={styles.Ref} onClick={login}>Login</a>
+                        <a href="/login" className={styles.Ref} onClick={login}>Login</a>
                     </button>
                 )}
             </div>
