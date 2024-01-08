@@ -11,11 +11,8 @@ const Home = ({ searchInput }) => {
         fetch(`http://localhost:8080/movies/${searchInput}/similar`)
             .then((response) => response.json())
             .then((json) => {
-                if (json.message) {
-                    setError(searchInput + " " + json.message);
-                    setMovies([]);
-                } else if (json.length === 0) {
-                    setError(searchInput + 'Movie not found');
+                if (json.message && json.message.includes("not found")) {
+                    setError(`No results for "${searchInput}". Please try another title.`);
                     setMovies([]);
                 } else {
                     setError(null);
