@@ -7,6 +7,10 @@ const MovieItem = ({ movie }) => {
     return (
         <div className={styles.movieItem}>
             <img className={styles.moviePoster} src={poster} alt={movie.Title} />
+            <div className={styles.movieInfo}>
+                <h3 className={styles.movieTitle}>{movie.Title}</h3>
+                <p className={styles.movieYear}>{movie.Year}</p>
+            </div>
         </div>
     );
 };
