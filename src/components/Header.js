@@ -1,14 +1,20 @@
 // Desc: Header component for the app
 // This component contains the header for the app. It contains the title, search bar, and the login button.
 
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styles from "../styles/Header.module.css";
 import logo from "../images/croppedlogo.png";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Header = ({ handleSearch }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchInput, setSearchInput] = useState("");
+    const { user, handleUnsetUser } = useContext(AuthContext);
+    const [isLoggedIn, setIsLoggedIn] = useState(user ? user.loggedIn : false);
+
+    useEffect(() => {
+        setIsLoggedIn(user ? user.loggedIn : false);
+    }, [user]);
 
     const logout = () => {
         setIsLoggedIn(false);

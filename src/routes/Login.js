@@ -9,7 +9,7 @@ const Login = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    //const { handleSetUser } = useContext(AuthContext);
+    const { handleSetUser } = useContext(AuthContext);
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
 
@@ -43,7 +43,7 @@ const Login = () => {
             password: password,
         };
 
-        fetch('http://localhost:8888/users/login?token=token', {
+        fetch('http://localhost:8080/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,19 +54,15 @@ const Login = () => {
                 return response.json();
             })
             .then(data => {
-                //console.log(data);
+                console.log(data);
                 // Set the token in AuthContext
                 const updatedUser = {
                     token: data.token,
                     loggedIn: true,
                     username: usernameLoggedIn,
-                    id: data.id,
-                    bio: data.bio,
-                    email: data.email,
-                    image: data.image,
+                    id: data.id
                 };
-                //handleSetUser(updatedUser);
-                //console.log(user);
+                handleSetUser(updatedUser);
                 // Redirect to the home page
                 navigate("/");
             })

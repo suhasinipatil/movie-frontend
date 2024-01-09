@@ -8,7 +8,6 @@ const AuthProvider = ({ children }) => {
     loggedIn: false,
     username: '',
     id: '',
-    email: ''
   });
 
   const handleSetUser = (userData) => {
@@ -23,9 +22,6 @@ const AuthProvider = ({ children }) => {
       loggedIn: false,
       username: '',
       id: '',
-      bio: '',
-      image: '',
-      email: ''
     });
     localStorage.removeItem('user');
   };
