@@ -1,13 +1,6 @@
-.search {
-    font-size: large;
-    border: none;
-    background-color: black;
-    color: white;
-}
-
 .Ref {
     text-decoration: none;
-    color: white;
+    color: rgb(195, 187, 187);
 }
 
 .searchIcon {
@@ -35,17 +28,22 @@
     border-bottom: rgb(170, 169, 169, 0.5) solid 1px;
 }
 
-.login {
+.login,
+.logout,
+.about,
+.search {
     font-size: large;
     border: none;
     background-color: black;
-    color: white;
+    color: rgb(195, 187, 187);
 }
 
-.about {
+.username {
     font-size: large;
     border: none;
     background-color: black;
+    color: rgb(195, 187, 187);
+    margin-right: 1%;
 }
 
 .buttonContainer {
@@ -80,4 +78,20 @@
     border: 1px solid black;
     margin-left: 10px;
     margin-top: 14px;
+}
+
+.iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.iconBackground {
+    background-color: rgb(72, 133, 232);
+    /* Replace with the color you want */
+    border-radius: 50%;
+    /* Makes the background circular */
+    padding: 5px;
+    /* Adjust as needed */
 }

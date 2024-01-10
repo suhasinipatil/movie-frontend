@@ -5,12 +5,15 @@ import React, { useState, useContext, useEffect } from "react";
 import styles from "../styles/Header.module.css";
 import logo from "../images/croppedlogo.png";
 import { AuthContext } from "../contexts/AuthContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Header = ({ handleSearch }) => {
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchInput, setSearchInput] = useState("");
     const { user, handleUnsetUser } = useContext(AuthContext);
     const [isLoggedIn, setIsLoggedIn] = useState(user ? user.loggedIn : false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
         setIsLoggedIn(user ? user.loggedIn : false);
@@ -18,7 +21,12 @@ const Header = ({ handleSearch }) => {
 
     const logout = () => {
         setIsLoggedIn(false);
+        handleUnsetUser();
     }
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
 
     const login = () => {
         setIsLoggedIn(true);
@@ -63,9 +71,15 @@ const Header = ({ handleSearch }) => {
                 </button>
                 {isLoggedIn ? (
                     <>
-                        <button className={styles.login} onClick={logout}>
-                            Logout
-                        </button>
+                        <div className={styles.iconContainer} >
+                            <p className={styles.username}>{user.username}</p>
+                            <div className={styles.iconBackground}>
+                                <FontAwesomeIcon icon={faUser} color="white" size="lg" />
+                            </div>
+                            <button className={styles.logout} onClick={logout}>
+                                Logout
+                            </button>
+                        </div>
                     </>
                 ) : (
                     <button className={styles.login}>

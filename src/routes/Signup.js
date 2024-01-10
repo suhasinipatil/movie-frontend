@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import styles from './styles/Signup.module.css';
+import styles from '../styles/Signup.module.css';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [username, setUsername] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
     const handleUsernameBlur = () => {
         setError("");
@@ -31,7 +33,21 @@ const Signup = () => {
         }
     };
 
+    const handleConfirmPasswordBlur = () => {
+        setError("");
+        if (confirmPassword.trim() === '') {
+            setConfirmPasswordError("Confirm Password cannot be empty");
+            setConfirmPassword("");
+        } else if (confirmPassword !== password) {
+            setConfirmPasswordError("Passwords do not match");
+            setConfirmPassword("");
+        } else {
+            setConfirmPasswordError("");
+        }
+    }
+
     const handleSignup = () => {
+
         // Create an object with the user's signup data
         const userData = {
             username: username,
@@ -52,7 +68,7 @@ const Signup = () => {
             .then(data => {
                 //console.log(data);
                 // Redirect to the home page
-                navigate("/");
+                navigate("/login");
             })
             .catch(error => {
                 console.log(error);
@@ -66,12 +82,10 @@ const Signup = () => {
 
     return (
         <div>
-            <div>
-                <h1 className={styles.signUpHeaderStyle}>Sign Up to Blog App</h1>
-            </div>
             <div className={styles.errorDiv}>
                 {usernameError}<br />
-                {passwordError}
+                {passwordError}<br />
+                {confirmPasswordError}
             </div>
             <div className={styles.form}>
                 <table>
@@ -86,6 +100,8 @@ const Signup = () => {
                                 onBlur={handleUsernameBlur}
                             />
                         </td>
+                    </tr>
+                    <tr>
                         <td>
                             <h4 className={styles.labelStyle}>Password</h4>
                             <input
@@ -98,29 +114,34 @@ const Signup = () => {
                         </td>
                     </tr>
                     <tr>
-                        <td colSpan="2">
-                            <h4 className={styles.labelStyle}>Email</h4>
+                        <td>
+                            <h4 className={styles.labelStyle}>Confirm Password</h4>
                             <input
-                                type="text"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className={emailError ? styles.invalid : styles.inputStyle}
-                                onBlur={handleEmailBlur}
+                                type='password'
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                className={confirmPasswordError ? styles.invalid : styles.inputStyle}
+                                onBlur={handleConfirmPasswordBlur}
                             />
                         </td>
                     </tr>
                     <tr>
-                        <td colSpan="2">
+                        <td>
                             <button
                                 onClick={handleSignup}
-                                disabled={usernameError || passwordError}
+                                disabled={usernameError || passwordError || confirmPasswordError}
                                 className={styles.buttonStyle}
                             >Create Account</button>
                         </td>
                     </tr>
                     <tr>
                         <td colSpan="2">
-                            <p className={styles.loginText}>Already have an account? <a href="/login">Login</a></p>
+                            <p className={styles.loginText}>
+                                Already have an account?
+                                <a href="/login" className={styles.loginUrl}>
+                                    Login
+                                </a>
+                            </p>
                         </td>
                     </tr>
                 </table>
