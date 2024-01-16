@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import Login from '../routes/Login';
 import Home from '../routes/Home';
 import Signup from '../routes/Signup';
+import MovieDetails from '../routes/MovieDetails';
 
 const MovieApp = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -26,6 +27,7 @@ const MovieApp = () => {
                 <Route path="/about" element={<AboutMe />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/:movieId" element={<MovieDetails />} />
                 <Route path="*" element={<h1>Not Found</h1>} />
             </Routes>
         </>

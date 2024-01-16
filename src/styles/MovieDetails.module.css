@@ -1,0 +1,70 @@
+.title {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1rem;
+    margin-top: 5rem;
+}
+
+.container {
+    display: flex;
+    align-items: vertical;
+}
+
+.containerIMdbRunTimeYear {
+    display: flex;
+    flex-direction: vertical;
+    gap: 0.5rem;
+}
+
+.info {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.poster {
+    position: absolute;
+    right: 0.5rem;
+    width: 50%;
+    height: 100%;
+    background-size: cover;
+    background-position: right;
+    z-index: -1;
+}
+
+.poster::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 50%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(61, 58, 58, 0.3) 0%, transparent 100%);
+    filter: blur(0);
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.year,
+.runtime,
+.genre,
+.director,
+.writer,
+.actors,
+.language,
+.country,
+.awards,
+.rating {
+    font-size: 1rem;
+    color: white;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.plot {
+    font-size: 1.2rem;
+    color: white;
+}
