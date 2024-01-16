@@ -17,28 +17,31 @@
     /* this will ensure the aspect ratio of the image is maintained */
 }
 
-.moviePoster {
-    transition: transform 0.3s ease-in-out;
+.movieContent {
+    position: relative;
+    overflow: hidden;
 }
 
-.moviePoster:hover {
+.moviePoster {
+    transition: transform 0.3s ease;
+}
+
+.movieContent:hover .moviePoster {
     transform: scale(1.1);
 }
 
 .movieInfo {
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    visibility: hidden;
+    background: rgba(15, 12, 12, 0.7);
+    color: rgb(166, 164, 164);
+    transition: opacity 0.3s ease;
     opacity: 0;
-    transition: visibility 0s, opacity 0.5s linear;
+    max-height: 150px;
+    overflow: hidden;
 }
 
-.movieItem:hover .movieInfo {
-    visibility: visible;
+.movieContent:hover .movieInfo {
     opacity: 1;
 }
 
@@ -46,12 +49,51 @@
     font-size: 20px;
     color: white;
     font-weight: bold;
-    word-break: break-all;
-    margin: 0;
+    word-break: none;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0;
 }
 
 .movieYear {
     font-size: 16px;
-    color: white;
-    margin: 0;
+    color: whitesmoke;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.moviePlot {
+    font-size: 18px;
+    color: whitesmoke;
+    margin-top: 0;
+    font-weight: semi-bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: wrap;
+    width: 200px;
+    /* Adjust as needed */
+    height: 150px;
+    /* Adjust as needed */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* Number of lines you want to display */
+    -webkit-box-orient: vertical;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.movieRuntime {
+    font-size: 16px;
+    color: whitesmoke;
+    margin-left: 2rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.movieYearRuntime {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }

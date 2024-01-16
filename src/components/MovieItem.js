@@ -6,10 +6,16 @@ const MovieItem = ({ movie }) => {
 
     return (
         <div className={styles.movieItem}>
-            <img className={styles.moviePoster} src={poster} alt={movie.Title} />
-            <div className={styles.movieInfo}>
-                <h3 className={styles.movieTitle}>{movie.Title}</h3>
-                <p className={styles.movieYear}>{movie.Year}</p>
+            <div className={styles.movieContent}>
+                <img className={styles.moviePoster} src={poster} alt={movie.Title} />
+                <div className={styles.movieInfo}>
+                    <h3 className={styles.movieTitle}>{movie.Title}</h3>
+                    <div className={styles.movieYearRuntime}>
+                        <p className={styles.movieYear}>{movie.Year}</p>
+                        <p className={styles.movieRuntime}>{movie.Runtime}</p>
+                    </div>
+                    <p className={styles.moviePlot}>{movie.Plot}</p>
+                </div>
             </div>
         </div>
     );
