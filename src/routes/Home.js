@@ -21,6 +21,20 @@ const Home = ({ searchInput }) => {
             });
     }, [searchInput]);
 
+    useEffect(() => {
+        fetch(`http://localhost:8080/movies/year`)
+            .then((response) => response.json())
+            .then((json) => {
+                if (json.message && json.message.includes("not found")) {
+                    setError(`No movies found.`);
+                    setMovies([]);
+                } else {
+                    setError(null);
+                    setMovies(json);
+                }
+            });
+    }, []);
+
     return (
         <div className="Home">
             {error ? <p className="errorMessage">{error}</p> : movies.map((movie) => (
