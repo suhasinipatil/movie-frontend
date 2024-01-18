@@ -8,7 +8,7 @@ const Home = ({ searchInput }) => {
 
     useEffect(() => {
         if (searchInput === "") return;
-        fetch(`http://localhost:8080/movies/${searchInput}/similar`)
+        fetch(`http://localhost:8080/movies/${searchInput}`)
             .then((response) => response.json())
             .then((json) => {
                 if (json.message && json.message.includes("not found")) {
@@ -20,7 +20,6 @@ const Home = ({ searchInput }) => {
                 }
             });
     }, [searchInput]);
-
 
     return (
         <div className="Home">
