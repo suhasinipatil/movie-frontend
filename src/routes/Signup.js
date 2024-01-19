@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from '../styles/Signup.module.css';
 import { useNavigate } from 'react-router-dom';
 
+
 const Signup = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");

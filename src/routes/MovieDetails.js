@@ -7,6 +7,7 @@ import styles from "../styles/MovieDetails.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import MovieItem from "../components/MovieItem";
+import { AuthContext } from '../contexts/AuthContext';
 
 const MovieDetails = () => {
     const { movieId } = useParams();
@@ -14,9 +15,10 @@ const MovieDetails = () => {
     const movie = location.state.movie;
     const [isFavorited, setIsFavorited] = useState(false);
     const [movies, setMovies] = useState([]);
+    const { user } = React.useContext(AuthContext);
 
     useEffect(() => {
-        isFavorited ? console.log("favorite") : console.clear();
+        isFavorited ? console.log("favorite") : console.log("not favorite");
     }, [isFavorited]);
 
     useEffect(() => {
@@ -33,23 +35,42 @@ const MovieDetails = () => {
 
 
     const addFavorite = () => {
+        console.log("Add to favorite ", isFavorited);
+
+        if (!isFavorited) {
+            console.log("My favorite ", isFavorited);
+            fetch(`http://localhost:8080/movies/favourite/${movieId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token,
+                },
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        } else if (isFavorited) {
+            console.log("Remove from my favorite ", isFavorited);
+            fetch(`http://localhost:8080/movies/favourite/${movieId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token,
+                },
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
         setIsFavorited(!isFavorited);
-        //console.log("Add to favorite");
-        //console.log(JSON.stringify(movie));
-        // fetch('http://localhost:8080/favorites', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(movie),
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log('Success:', data);
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //     });
     };
 
     return (

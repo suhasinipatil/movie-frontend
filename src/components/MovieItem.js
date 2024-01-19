@@ -19,7 +19,6 @@ const MovieItem = ({ movie }) => {
                     <img className={styles.moviePoster} src={poster} alt={movie.Title} />
                 </button>
                 <div className={styles.movieInfo}>
-                    <button >Add to Favorite</button>
                     <h3 className={styles.movieTitle}>{movie.Title}</h3>
                     <div className={styles.movieYearRuntime}>
                         <p className={styles.movieYear}>{movie.Year}</p>
