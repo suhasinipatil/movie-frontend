@@ -8,7 +8,7 @@ const AboutMe = () => {
         <div className={styles.about}>
             <h1>Hello Coding Enthusiasts!</h1>
             <p>
-                I'm Suhasini, a tech aficionado venturing into the captivating landscapes of Java and React. By day, I immerse myself in the coding universe, crafting solutions and navigating the ever-evolving tech scene.
+                I'm Suhasini, a tech enthusiast exploring the exciting realms of Java and React. During the day, I dive into the coding universe, creating solutions and navigating the ever-changing tech landscape.
             </p>
 
             <h2>Who Am I?</h2>

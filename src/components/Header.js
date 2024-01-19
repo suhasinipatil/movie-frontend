@@ -13,7 +13,6 @@ const Header = ({ handleSearch }) => {
     const [searchInput, setSearchInput] = useState("");
     const { user, handleUnsetUser } = useContext(AuthContext);
     const [isLoggedIn, setIsLoggedIn] = useState(user ? user.loggedIn : false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
         setIsLoggedIn(user ? user.loggedIn : false);
@@ -23,10 +22,6 @@ const Header = ({ handleSearch }) => {
         setIsLoggedIn(false);
         handleUnsetUser();
     }
-
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
 
     const login = () => {
         setIsLoggedIn(true);

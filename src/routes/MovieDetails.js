@@ -1,3 +1,6 @@
+// Desc: It fetches and displays data such as the movie's title, 
+// description, ratings, and similar movies. It also allows users to favorite the movie.
+
 import { useLocation, useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import styles from "../styles/MovieDetails.module.css";

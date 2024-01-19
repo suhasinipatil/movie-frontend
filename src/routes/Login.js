@@ -1,3 +1,5 @@
+// Desc: Login page
+
 import React, { useState, useContext } from "react";
 import styles from "../styles/Login.module.css";
 import { AuthContext } from "../contexts/AuthContext";
