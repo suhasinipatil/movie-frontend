@@ -84,6 +84,13 @@ const Login = () => {
         <div>
             <div className={styles.formWrapper}>
                 <form className={styles.form} onSubmit={handleSubmit}>
+                    <a href="http://localhost:8080/users/login" className={styles.googlehref}>
+                        <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="google logo" className={styles.googleImage} />
+                        <span className={styles.googleText}>Sign in with Google</span>
+                    </a>
+                    <div className={styles.hrDiv}>
+                        <hr className={styles.hr} /> <p className={styles.or}>OR</p> <hr className={styles.hr} />
+                    </div>
                     <input
                         type="text"
                         placeholder="username"
