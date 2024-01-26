@@ -1,6 +1,6 @@
 // Desc: Login page
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styles from "../styles/Login.module.css";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const clientId = "960166939820-jk4j2t4b8un08fqbmhvp05ctqebb8oeo.apps.googleusercontent.com";
+    const redirectUri = "http://localhost:3000/login";
 
     const { handleSetUser } = useContext(AuthContext);
     const [usernameError, setUsernameError] = useState("");
@@ -34,6 +36,32 @@ const Login = () => {
             setPasswordError("");
         }
     };
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+
+        if (code) {
+            const loginData = {
+                code: code,
+            };
+            fetch('http://localhost:8080/api/auth/google', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ loginData }),
+            })
+                .then(response => { response.text() })
+                .then(data => {
+                    // Handle the response from your server
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -84,7 +112,7 @@ const Login = () => {
         <div>
             <div className={styles.formWrapper}>
                 <form className={styles.form} onSubmit={handleSubmit}>
-                    <a href="http://localhost:8080/users/login" className={styles.googlehref}>
+                    <a href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=openid%20email%20profile`} className={styles.googlehref}>
                         <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="google logo" className={styles.googleImage} />
                         <span className={styles.googleText}>Sign in with Google</span>
                     </a>

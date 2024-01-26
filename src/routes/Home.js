@@ -59,7 +59,7 @@ const Home = ({ searchInput }) => {
                     }
                 });
         }
-    }, [user.loggedIn]);
+    }, [user.token, user.loggedIn]);
 
     return (
         <div className="Home">
