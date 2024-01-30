@@ -50,12 +50,49 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ loginData }),
+                body: JSON.stringify(loginData),
             })
-                .then(response => { response.text() })
+                .then(response => response.text())
                 .then(data => {
                     // Handle the response from your server
                     console.log(data);
+                    const loginData = {
+                        access_token: data,
+                    };
+                    fetch('http://localhost:8080/users/login/google', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(loginData),
+                    })
+                        .then(response => {
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            // Set the token in AuthContext
+                            const updatedUser = {
+                                token: data.token,
+                                loggedIn: true,
+                                username: data.username,
+                                id: data.id
+                            };
+                            handleSetUser(updatedUser);
+                            // Redirect to the home page
+                            navigate("/");
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            if (error instanceof SyntaxError && error.message.includes("Unexpected token")) {
+                                setError("Username or password is incorrect");
+                            } else {
+                                setError(error.message);
+                            }
+                            setUsernameLoggedIn("");
+                            setPassword("");
+                        });
+
                 })
                 .catch((error) => {
                     console.error('Error:', error);
