@@ -7,12 +7,14 @@ import logo from "../images/croppedlogo.png";
 import { AuthContext } from "../contexts/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { MovieContext } from "../contexts/MovieContext";
 
 const Header = ({ handleSearch }) => {
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchInput, setSearchInput] = useState("");
     const { user, handleUnsetUser } = useContext(AuthContext);
     const [isLoggedIn, setIsLoggedIn] = useState(user ? user.loggedIn : false);
+    const { handleUnsetMovies } = useContext(MovieContext);
 
     useEffect(() => {
         setIsLoggedIn(user ? user.loggedIn : false);
@@ -21,6 +23,7 @@ const Header = ({ handleSearch }) => {
     const logout = () => {
         setIsLoggedIn(false);
         handleUnsetUser();
+        handleUnsetMovies();
     }
 
     const login = () => {

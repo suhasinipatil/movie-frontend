@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import MovieItem from "../components/MovieItem";
 import { AuthContext } from '../contexts/AuthContext';
+import { MovieContext } from "../contexts/MovieContext";
 
 const MovieDetails = () => {
     const { movieId } = useParams();
@@ -16,10 +17,17 @@ const MovieDetails = () => {
     const [isFavorited, setIsFavorited] = useState(false);
     const [movies, setMovies] = useState([]);
     const { user } = React.useContext(AuthContext);
+    const { favMovies } = React.useContext(MovieContext);
 
     useEffect(() => {
         isFavorited ? console.log("favorite") : console.log("not favorite");
     }, [isFavorited]);
+
+    useEffect(() => {
+        // Check if the current movie is in the user's favorites
+        const isFav = favMovies.some(favMovie => favMovie.imdbID === movieId);
+        setIsFavorited(isFav);
+    }, [movieId]);
 
     useEffect(() => {
         fetch(`http://localhost:8080/movies/similar/${movieId}`)
@@ -35,10 +43,10 @@ const MovieDetails = () => {
 
 
     const addFavorite = () => {
-        console.log("Add to favorite ", isFavorited);
+        //console.log("Add to favorite ", isFavorited);
 
         if (!isFavorited) {
-            console.log("My favorite ", isFavorited);
+            //console.log("My favorite ", isFavorited);
             fetch(`http://localhost:8080/movies/favourite/${movieId}`, {
                 method: 'POST',
                 headers: {
@@ -48,13 +56,13 @@ const MovieDetails = () => {
             })
                 .then(response => response.text())
                 .then(data => {
-                    console.log('Success:', data);
+                    //console.log('Success:', data);
                 })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
         } else if (isFavorited) {
-            console.log("Remove from my favorite ", isFavorited);
+            // console.log("Remove from my favorite ", isFavorited);
             fetch(`http://localhost:8080/movies/favourite/${movieId}`, {
                 method: 'DELETE',
                 headers: {

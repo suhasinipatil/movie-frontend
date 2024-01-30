@@ -2,14 +2,14 @@ import styles from "../styles/MovieItem.module.css";
 import noPoster from "../images/no-poster.jpg";
 import { useNavigate } from 'react-router-dom';
 
-const MovieItem = ({ movie }) => {
+const MovieItem = ({ movie, IsFav }) => {
     const poster = movie.Poster !== "N/A" ? movie.Poster : noPoster;
     const movieId = movie.imdbID;
     const navigate = useNavigate();
 
     const handleClick = (movie) => {
         //pass the movie object to the route
-        navigate(`/${movieId}`, { state: { movie: movie } });
+        navigate(`/${movieId}`, { state: { movie: movie, IsFav: IsFav } });
     };
 
     return (

@@ -55,7 +55,7 @@ const Login = () => {
                 .then(response => response.text())
                 .then(data => {
                     // Handle the response from your server
-                    console.log(data);
+                    //console.log(data);
                     const loginData = {
                         access_token: data,
                     };
@@ -70,7 +70,7 @@ const Login = () => {
                             return response.json();
                         })
                         .then(data => {
-                            console.log(data);
+                            // console.log(data);
                             // Set the token in AuthContext
                             const updatedUser = {
                                 token: data.token,
@@ -98,7 +98,7 @@ const Login = () => {
                     console.error('Error:', error);
                 });
         }
-    }, []);
+    },);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -121,7 +121,7 @@ const Login = () => {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 // Set the token in AuthContext
                 const updatedUser = {
                     token: data.token,

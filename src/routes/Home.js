@@ -3,15 +3,57 @@
 import { useEffect, useState, useContext } from "react";
 import MovieItem from "../components/MovieItem";
 import { AuthContext } from '../contexts/AuthContext';
+import { MovieContext } from '../contexts/MovieContext';
 
 const Home = ({ searchInput }) => {
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
     const { user } = useContext(AuthContext);
+    const { handleSetMovies } = useContext(MovieContext);
 
     const [genreFilter, setGenreFilter] = useState('');
     const [languageFilter, setLanguageFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
+    const [favouriteMovies, setFavouriteMovies] = useState([]);
+
+    // Fetch favourite movies when user is logged in
+    useEffect(() => {
+        if (user.loggedIn) {
+            fetch(`http://localhost:8080/movies/favourite`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token,
+                },
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    if (json.message && json.message.includes("not found")) {
+                        setFavouriteMovies([]);
+                    } else {
+                        setFavouriteMovies(json);
+                        handleSetMovies(json);
+                    }
+                });
+        }
+    }, [user.loggedIn, user.token]);
+
+    // Fetch all movies when user is not logged in
+    useEffect(() => {
+        if (!user.loggedIn) {
+            fetch(`http://localhost:8080/movies/year`)
+                .then((response) => response.json())
+                .then((json) => {
+                    if (json.message && json.message.includes("not found")) {
+                        setError(`No movies found.`);
+                        setMovies([]);
+                    } else {
+                        setError(null);
+                        setMovies(json);
+                    }
+                });
+        }
+    }, [user.loggedIn]);
 
     useEffect(() => {
         if (searchInput === "") return;
@@ -28,42 +70,11 @@ const Home = ({ searchInput }) => {
             });
     }, [searchInput]);
 
-    useEffect(() => {
-        if (user.loggedIn) {
-            fetch(`http://localhost:8080/movies/favourite`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + user.token,
-                },
-            })
-                .then((response) => response.json())
-                .then((json) => {
-                    if (json.message && json.message.includes("not found")) {
-                        setMovies([]);
-                    } else {
-                        setMovies(json);
-                    }
-                });
-        }
-        else {
-            fetch(`http://localhost:8080/movies/year`)
-                .then((response) => response.json())
-                .then((json) => {
-                    if (json.message && json.message.includes("not found")) {
-                        setError(`No movies found.`);
-                        setMovies([]);
-                    } else {
-                        setError(null);
-                        setMovies(json);
-                    }
-                });
-        }
-    }, [user.token, user.loggedIn]);
-
     return (
         <div className="Home">
-            {searchInput !== "" ?
+            {error ? (
+                <p className="errorMessage">{error}</p>
+            ) : searchInput !== "" ? (
                 <>
                     <div className="filter-container">
                         <select value={genreFilter} onChange={e => setGenreFilter(e.target.value)} className="filterButton">
@@ -105,15 +116,29 @@ const Home = ({ searchInput }) => {
                         </select>
                     </div>
                     <p className="resultsP">Results for "{searchInput}."</p>
+                    {movies
+                        .filter((movie) =>
+                            movie.Genre.toLowerCase().includes(genreFilter.toLowerCase()) &&
+                            movie.Language.toLowerCase().includes(languageFilter.toLowerCase()) &&
+                            movie.Country.toLowerCase().includes(countryFilter.toLowerCase())
+                        )
+                        .map((movie) => (
+                            <MovieItem key={movie.id} movie={movie} IsFav={false} />
+                        ))}
                 </>
-                : <br />}
-            {error ? <p className="errorMessage">{error}</p> : movies.filter(movie =>
-                movie.Genre.toLowerCase().includes(genreFilter.toLowerCase()) &&
-                movie.Language.toLowerCase().includes(languageFilter.toLowerCase()) &&
-                movie.Country.toLowerCase().includes(countryFilter.toLowerCase())
-            ).map((movie) => (
-                <MovieItem key={movie.imdbID} movie={movie} />
-            ))}
+            ) : user.loggedIn ? (
+                // Render favourite movies
+                favouriteMovies
+                    .map((movie) => (
+                        <MovieItem key={movie.id} movie={movie} IsFav={true} />
+                    ))
+            ) : (
+                // Render all movies
+                movies
+                    .map((movie) => (
+                        <MovieItem key={movie.id} movie={movie} IsFav={false} />
+                    ))
+            )}
         </div>
     );
 };
