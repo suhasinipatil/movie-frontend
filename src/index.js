@@ -5,15 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/AuthContext';
 import { MovieProvider } from './contexts/MovieContext';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <MovieProvider>
-        <App />
-      </MovieProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <MovieProvider>
+          <App />
+        </MovieProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
 

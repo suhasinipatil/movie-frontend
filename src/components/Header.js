@@ -12,10 +12,14 @@ import { MovieContext } from "../contexts/MovieContext";
 const Header = ({ handleSearch }) => {
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchInput, setSearchInput] = useState("");
-    const { user, handleUnsetUser } = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
     const [isLoggedIn, setIsLoggedIn] = useState(user ? user.loggedIn : false);
     const { handleUnsetMovies } = useContext(MovieContext);
+    const { user, handleUnsetUser } = authContext;
 
+    if (!authContext) {
+        console.log("authContext is null");
+    }
     useEffect(() => {
         setIsLoggedIn(user ? user.loggedIn : false);
     }, [user]);
