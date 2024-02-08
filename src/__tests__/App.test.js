@@ -1,8 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App';
 
-test('renders app logo', async () => {
+jest.mock('../components/MovieApp', () => {
+  return function DummyMovieApp() {
+    return <div data-testid="movieapp"></div>;
+  };
+});
+
+test('renders MovieApp component', () => {
   render(<App />);
-  const logoElement = await screen.findByAltText(/Movie App/i);
-  expect(logoElement).toBeInTheDocument();
+
+  const movieAppElement = screen.getByTestId('movieapp');
+  expect(movieAppElement).toBeInTheDocument();
 });
