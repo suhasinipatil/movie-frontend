@@ -13,9 +13,10 @@ const Header = ({ handleSearch }) => {
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchInput, setSearchInput] = useState("");
     const authContext = useContext(AuthContext);
+    const { user, handleUnsetUser } = authContext;
     const [isLoggedIn, setIsLoggedIn] = useState(user ? user.loggedIn : false);
     const { handleUnsetMovies } = useContext(MovieContext);
-    const { user, handleUnsetUser } = authContext;
+
 
     if (!authContext) {
         console.log("authContext is null");

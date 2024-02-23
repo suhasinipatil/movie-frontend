@@ -6,17 +6,21 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/AuthContext';
 import { MovieProvider } from './contexts/MovieContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import store from './store';
+import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <AuthProvider>
-        <MovieProvider>
-          <App />
-        </MovieProvider>
-      </AuthProvider>
-    </ErrorBoundary>
+    <Provider store={store}>
+      <ErrorBoundary>
+        <AuthProvider>
+          <MovieProvider>
+            <App />
+          </MovieProvider>
+        </AuthProvider>
+      </ErrorBoundary>
+    </Provider>
   </React.StrictMode>
 );
 

@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import MovieItem from "../components/MovieItem";
 import { AuthContext } from '../contexts/AuthContext';
 import { MovieContext } from '../contexts/MovieContext';
+import { useSelector } from "react-redux";
 
 const Home = ({ searchInput }) => {
     const [movies, setMovies] = useState([]);
@@ -15,6 +16,8 @@ const Home = ({ searchInput }) => {
     const [languageFilter, setLanguageFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
     const [favouriteMovies, setFavouriteMovies] = useState([]);
+
+    const moviesState = useSelector((state) => state.movies);
 
     // Fetch favourite movies when user is logged in
     useEffect(() => {
@@ -36,24 +39,16 @@ const Home = ({ searchInput }) => {
                     }
                 });
         }
-    }, [user.loggedIn, user.token]);
+    },);
 
     // Fetch all movies when user is not logged in
     useEffect(() => {
         if (!user.loggedIn) {
-            fetch(`http://localhost:8080/movies/year`)
-                .then((response) => response.json())
-                .then((json) => {
-                    if (json.message && json.message.includes("not found")) {
-                        setError(`No movies found.`);
-                        setMovies([]);
-                    } else {
-                        setError(null);
-                        setMovies(json);
-                    }
-                });
+            //console.log("Fetching movies");
+            //console.log(moviesState);
+            setMovies(moviesState);
         }
-    }, [user.loggedIn]);
+    }, [moviesState, user.loggedIn]);
 
     useEffect(() => {
         if (searchInput === "") return;
@@ -123,20 +118,20 @@ const Home = ({ searchInput }) => {
                             movie.Country.toLowerCase().includes(countryFilter.toLowerCase())
                         )
                         .map((movie) => (
-                            <MovieItem key={movie.id} movie={movie} IsFav={false} />
+                            <MovieItem key={movie.imdbID} movie={movie} IsFav={false} />
                         ))}
                 </>
             ) : user.loggedIn ? (
                 // Render favourite movies
                 favouriteMovies
                     .map((movie) => (
-                        <MovieItem key={movie.id} movie={movie} IsFav={true} />
+                        <MovieItem key={movie.imdbID} movie={movie} IsFav={true} />
                     ))
             ) : (
                 // Render all movies
                 movies
                     .map((movie) => (
-                        <MovieItem key={movie.id} movie={movie} IsFav={false} />
+                        <MovieItem key={movie.imdbID} movie={movie} IsFav={false} />
                     ))
             )}
         </div>
