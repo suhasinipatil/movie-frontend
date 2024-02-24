@@ -19,6 +19,19 @@ const Home = ({ searchInput }) => {
 
     const moviesState = useSelector((state) => state.movies);
 
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10); // Number of items per page
+    const totalPages = Math.ceil(movies.length / itemsPerPage);
+
+    const updatePage = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = movies.slice(indexOfFirstItem, indexOfLastItem);
+
     // Fetch favourite movies when user is logged in
     useEffect(() => {
         if (user.loggedIn) {
@@ -129,11 +142,17 @@ const Home = ({ searchInput }) => {
                     ))
             ) : (
                 // Render all movies
-                movies
+                currentItems
                     .map((movie) => (
                         <MovieItem key={movie.imdbID} movie={movie} IsFav={false} />
                     ))
             )}
+            <div className="pagination">
+                <button onClick={() => updatePage(1)} disabled={currentPage === 1}>First</button>
+                <button onClick={() => updatePage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                <button onClick={() => updatePage(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                <button onClick={() => updatePage(totalPages)} disabled={currentPage === totalPages}>Last</button>
+            </div>
         </div>
     );
 };

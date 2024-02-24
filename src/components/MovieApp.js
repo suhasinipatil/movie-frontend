@@ -16,10 +16,8 @@ import { useEffect } from 'react';
 const MovieApp = () => {
     const [searchInput, setSearchInput] = useState("");
     const dispatch = useDispatch();
-    //const moviesState = useSelector((state) => state.movies);
 
     const handleSearch = (input) => {
-        //console.log(input);
         setSearchInput(input);
     }
 

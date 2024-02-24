@@ -9,6 +9,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import MovieItem from "../components/MovieItem";
 import { AuthContext } from '../contexts/AuthContext';
 import { MovieContext } from "../contexts/MovieContext";
+import { FixedSizeGrid as Grid } from "react-window";
 
 const MovieDetails = () => {
     const { movieId } = useParams();
@@ -19,6 +20,19 @@ const MovieDetails = () => {
     const { user } = React.useContext(AuthContext);
     const { favMovies } = React.useContext(MovieContext);
 
+    const columnCount = 5; // Adjust based on how many items you want in a row
+
+    const Cell = ({ columnIndex, rowIndex, style }) => {
+        const movie = movies[rowIndex * columnCount + columnIndex];
+        return (
+            movie && (
+                <div style={style}>
+                    <MovieItem key={movie.imdbID} movie={movie} />
+                </div>
+            )
+        );
+    };
+
     useEffect(() => {
         isFavorited ? console.log("favorite") : console.log("not favorite");
     }, [isFavorited]);
@@ -27,7 +41,7 @@ const MovieDetails = () => {
         // Check if the current movie is in the user's favorites
         const isFav = favMovies.some(favMovie => favMovie.imdbID === movieId);
         setIsFavorited(isFav);
-    }, [movieId]);
+    }, [movieId, favMovies]);
 
     useEffect(() => {
         fetch(`http://localhost:8080/movies/similar/${movieId}`)
@@ -154,9 +168,19 @@ const MovieDetails = () => {
             <br /><br /><br />
             <div>
                 <h1 className={styles.MoreLikeThis}>More Like this</h1>
-                {movies.map((movie) => (
+                <Grid
+                    columnCount={columnCount}
+                    columnWidth={200 + 100} // Adjust based on the width of your MovieItem
+                    height={500} // Adjust based on your requirement
+                    rowCount={Math.ceil(movies.length / columnCount)}
+                    rowHeight={300 + 50} // Adjust based on the height of your MovieItem
+                    width={1510} // Adjust based on your requirement
+                >
+                    {Cell}
+                </Grid>
+                {/* {movies.map((movie) => (
                     <MovieItem key={movie.imdbID} movie={movie} />
-                ))}
+                ))} */}
             </div>
         </div>
     );
