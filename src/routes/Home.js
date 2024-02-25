@@ -34,8 +34,9 @@ const Home = ({ searchInput }) => {
 
     // Fetch favourite movies when user is logged in
     useEffect(() => {
+        //console.log(user.token, user.loggedIn);
         if (user.loggedIn) {
-            fetch(`http://localhost:8080/movies/favourite`, {
+            fetch(`http://localhost:8080/movies`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ const Home = ({ searchInput }) => {
                     }
                 });
         }
-    },);
+    }, [user.loggedIn, user.token, handleSetMovies]);
 
     // Fetch all movies when user is not logged in
     useEffect(() => {
@@ -65,7 +66,14 @@ const Home = ({ searchInput }) => {
 
     useEffect(() => {
         if (searchInput === "") return;
-        fetch(`http://localhost:8080/movies/${searchInput}`)
+        //add searhInput in params
+        fetch(`http://localhost:8080/movies/?title=` + searchInput,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
             .then((response) => response.json())
             .then((json) => {
                 if (json.message && json.message.includes("not found")) {

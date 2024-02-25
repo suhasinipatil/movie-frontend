@@ -44,7 +44,7 @@ const MovieDetails = () => {
     }, [movieId, favMovies]);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/movies/similar/${movieId}`)
+        fetch(`http://localhost:8080/movies?imdbId=` + movieId)
             .then((response) => response.json())
             .then((json) => {
                 if (json.message && json.message.includes("not found")) {

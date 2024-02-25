@@ -23,7 +23,7 @@ const MovieApp = () => {
 
     // Fetch all movies when user is not logged in
     useEffect(() => {
-        fetch(`http://localhost:8080/movies/year`, {
+        fetch(`http://localhost:8080/movies?year=true`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

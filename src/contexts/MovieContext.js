@@ -1,13 +1,14 @@
 import { createContext, useState } from "react";
+import { useCallback } from "react";    // Import the useCallback hook from React
 
 const MovieContext = createContext();
 
 const MovieProvider = ({ children }) => {
     const [favMovies, setFavmovies] = useState([]);
 
-    const handleSetMovies = (movies) => {
+    const handleSetMovies = useCallback((movies) => {
         setFavmovies(movies);
-    }
+    }, []);
 
     const handleUnsetMovies = () => {
         setFavmovies([]);
