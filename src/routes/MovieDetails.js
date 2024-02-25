@@ -44,7 +44,7 @@ const MovieDetails = () => {
     }, [movieId, favMovies]);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/movies?imdbId=` + movieId)
+        fetch(`http://localhost:8080/movies?imdbID=` + movieId)
             .then((response) => response.json())
             .then((json) => {
                 if (json.message && json.message.includes("not found")) {
@@ -178,9 +178,6 @@ const MovieDetails = () => {
                 >
                     {Cell}
                 </Grid>
-                {/* {movies.map((movie) => (
-                    <MovieItem key={movie.imdbID} movie={movie} />
-                ))} */}
             </div>
         </div>
     );

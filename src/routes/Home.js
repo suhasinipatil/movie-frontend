@@ -1,10 +1,11 @@
 // Desc: Home page
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useMemo, useCallback } from "react";
 import MovieItem from "../components/MovieItem";
 import { AuthContext } from '../contexts/AuthContext';
 import { MovieContext } from '../contexts/MovieContext';
 import { useSelector } from "react-redux";
+import MovieListWithPagination from "../components/MovieListWithPagination";
 
 const Home = ({ searchInput }) => {
     const [movies, setMovies] = useState([]);
@@ -15,26 +16,50 @@ const Home = ({ searchInput }) => {
     const [genreFilter, setGenreFilter] = useState('');
     const [languageFilter, setLanguageFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
-    const [favouriteMovies, setFavouriteMovies] = useState([]);
 
     const moviesState = useSelector((state) => state.movies);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10); // Number of items per page
-    const totalPages = Math.ceil(movies.length / itemsPerPage);
 
-    const updatePage = (newPage) => {
+    const totalPages = useMemo(() => Math.ceil(movies.length / itemsPerPage), [movies, itemsPerPage]);
+    const indexOfLastItem = useMemo(() => currentPage * itemsPerPage, [currentPage, itemsPerPage]);
+    const indexOfFirstItem = useMemo(() => indexOfLastItem - itemsPerPage, [indexOfLastItem, itemsPerPage]);
+    const currentItems = useMemo(() => movies.slice(indexOfFirstItem, indexOfLastItem), [movies, indexOfFirstItem, indexOfLastItem]);
+
+    const updatePage = useCallback((newPage) => {
         setCurrentPage(newPage);
-    };
+    }, []);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = movies.slice(indexOfFirstItem, indexOfLastItem);
+    const handleGenreChange = useCallback((e) => {
+        setGenreFilter(e.target.value);
+    }, []);
 
-    // Fetch favourite movies when user is logged in
+    const handleLanguageChange = useCallback((e) => {
+        setLanguageFilter(e.target.value);
+    }, []);
+
+    const handleCountryChange = useCallback((e) => {
+        setCountryFilter(e.target.value);
+    }, []);
+
+    const filteredItems = useMemo(() => {
+        return currentItems.filter((movie) =>
+            movie.Genre.toLowerCase().includes(genreFilter.toLowerCase()) &&
+            movie.Language.toLowerCase().includes(languageFilter.toLowerCase()) &&
+            movie.Country.toLowerCase().includes(countryFilter.toLowerCase())
+        );
+    }, [currentItems, genreFilter, languageFilter, countryFilter]);
+
+    const movieItems = useMemo(() => {
+        return filteredItems.map((movie) => (
+            <MovieItem key={movie.imdbID} movie={movie} IsFav={false} />
+        ));
+    }, [filteredItems]);
+
+    // Fetch favourite movies when user is logged in and all movies when user is not logged in
     useEffect(() => {
-        //console.log(user.token, user.loggedIn);
         if (user.loggedIn) {
             fetch(`http://localhost:8080/movies`, {
                 method: 'GET',
@@ -46,45 +71,38 @@ const Home = ({ searchInput }) => {
                 .then((response) => response.json())
                 .then((json) => {
                     if (json.message && json.message.includes("not found")) {
-                        setFavouriteMovies([]);
+                        //setFavouriteMovies([]);
+                        setMovies([]);
                     } else {
-                        setFavouriteMovies(json);
+                        //setFavouriteMovies(json);
+                        setMovies(json);
                         handleSetMovies(json);
                     }
                 });
-        }
-    }, [user.loggedIn, user.token, handleSetMovies]);
-
-    // Fetch all movies when user is not logged in
-    useEffect(() => {
-        if (!user.loggedIn) {
-            //console.log("Fetching movies");
-            //console.log(moviesState);
+        } else {
             setMovies(moviesState);
         }
-    }, [moviesState, user.loggedIn]);
 
-    useEffect(() => {
-        if (searchInput === "") return;
-        //add searhInput in params
-        fetch(`http://localhost:8080/movies/?title=` + searchInput,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then((response) => response.json())
-            .then((json) => {
-                if (json.message && json.message.includes("not found")) {
-                    setError(`No results for "${searchInput}". Please try another title.`);
-                    setMovies([]);
-                } else {
-                    setError(null);
-                    setMovies(json);
-                }
-            });
-    }, [searchInput]);
+        if (searchInput !== "") {
+            fetch(`http://localhost:8080/movies/?title=` + searchInput,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then((response) => response.json())
+                .then((json) => {
+                    if (json.message && json.message.includes("not found")) {
+                        setError(`No results for "${searchInput}". Please try another title.`);
+                        setMovies([]);
+                    } else {
+                        setError(null);
+                        setMovies(json);
+                    }
+                });
+        }
+    }, [user.loggedIn, user.token, handleSetMovies, moviesState, searchInput]);
 
     return (
         <div className="Home">
@@ -93,7 +111,7 @@ const Home = ({ searchInput }) => {
             ) : searchInput !== "" ? (
                 <>
                     <div className="filter-container">
-                        <select value={genreFilter} onChange={e => setGenreFilter(e.target.value)} className="filterButton">
+                        <select value={genreFilter} onChange={handleGenreChange} className="filterButton">
                             <option value="">Genres</option>
                             <option value="action">Action</option>
                             <option value="comedy">Comedy</option>
@@ -108,7 +126,7 @@ const Home = ({ searchInput }) => {
                             <option value="crime">Crime</option>
                         </select>
 
-                        <select value={languageFilter} onChange={e => setLanguageFilter(e.target.value)} className="filterButton">
+                        <select value={languageFilter} onChange={handleLanguageChange} className="filterButton">
                             <option value="">Languages</option>
                             <option value="english">English</option>
                             <option value="spanish">Spanish</option>
@@ -122,7 +140,7 @@ const Home = ({ searchInput }) => {
                             <option value="Dutch">Dutch</option>
                         </select>
 
-                        <select value={countryFilter} onChange={e => setCountryFilter(e.target.value)} className="filterButton">
+                        <select value={countryFilter} onChange={handleCountryChange} className="filterButton">
                             <option value="">Countries</option>
                             <option value="India">India</option>
                             <option value="Netherlands">Netherlands</option>
@@ -132,35 +150,22 @@ const Home = ({ searchInput }) => {
                         </select>
                     </div>
                     <p className="resultsP">Results for "{searchInput}."</p>
-                    {movies
-                        .filter((movie) =>
-                            movie.Genre.toLowerCase().includes(genreFilter.toLowerCase()) &&
-                            movie.Language.toLowerCase().includes(languageFilter.toLowerCase()) &&
-                            movie.Country.toLowerCase().includes(countryFilter.toLowerCase())
-                        )
-                        .map((movie) => (
-                            <MovieItem key={movie.imdbID} movie={movie} IsFav={false} />
-                        ))}
+                    <MovieListWithPagination
+                        currentItems={movieItems}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        updatePage={updatePage}
+                    />
                 </>
-            ) : user.loggedIn ? (
-                // Render favourite movies
-                favouriteMovies
-                    .map((movie) => (
-                        <MovieItem key={movie.imdbID} movie={movie} IsFav={true} />
-                    ))
             ) : (
-                // Render all movies
-                currentItems
-                    .map((movie) => (
-                        <MovieItem key={movie.imdbID} movie={movie} IsFav={false} />
-                    ))
+                <MovieListWithPagination
+                    currentItems={movieItems}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    updatePage={updatePage}
+                />
             )}
-            <div className="pagination">
-                <button onClick={() => updatePage(1)} disabled={currentPage === 1}>First</button>
-                <button onClick={() => updatePage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                <button onClick={() => updatePage(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
-                <button onClick={() => updatePage(totalPages)} disabled={currentPage === totalPages}>Last</button>
-            </div>
+
         </div>
     );
 };
